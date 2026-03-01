@@ -17,8 +17,6 @@ const sendMessage = async (req, res) => {
       success: true,
       message: "Message sent successfully 🚀"
     });
-
-      ``
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
