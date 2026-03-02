@@ -1,25 +1,29 @@
-const Message = require("../models/Message");
-const sendEmail = require("../utils/sendEmail");
+const Message = require('../models/Message');
+const sendEmail = require('../utils/sendEmail');
 
-const sendMessage = async (req, res) => {
+exports.sendMessage = async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-
+    // 1. Save to MongoDB
     const newMessage = await Message.create({ name, email, message });
 
-    await sendEmail(name, email, message);
-
-    res.status(201).json({
-      success: true,
-      message: "Message sent successfully 🚀"
+    // 2. Send to your inbox
+    await sendEmail({
+      to: "krupashahwork@gmail.com",
+      subject: `Portfolio Enquiry: ${name}`,
+      html: `
+        <h3>New Contact Message</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong> ${message}</p>
+      `
     });
+
+    // 3. Clean response (No backticks!)
+    res.status(201).json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Email Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
-
-module.exports = { sendMessage };
