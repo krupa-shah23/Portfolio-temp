@@ -177,7 +177,9 @@ function Network() {
     );
 }
 
-export default function NetworkBackground() {
+import dynamic from "next/dynamic";
+
+const NetworkBackgroundComponent = () => {
     return (
         <div className="absolute inset-0 z-0 pointer-events-none opacity-80 mix-blend-screen">
             <Canvas camera={{ position: [0, 0, 7], fov: 60 }}>
@@ -185,4 +187,6 @@ export default function NetworkBackground() {
             </Canvas>
         </div>
     );
-}
+};
+
+export default dynamic(() => Promise.resolve(NetworkBackgroundComponent), { ssr: false });
