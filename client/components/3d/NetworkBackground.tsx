@@ -1,11 +1,17 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
+import dynamic from "next/dynamic";
 import * as THREE from "three";
+
 
 const PARTICLE_COUNT = 80;
 const MAX_DISTANCE = 2.2;
+const Canvas = dynamic(
+    () => import("@react-three/fiber").then(mod => mod.Canvas),
+    { ssr: false }
+);
 
 function Network() {
     const pointsRef = useRef<THREE.Points>(null);
@@ -15,7 +21,7 @@ function Network() {
     const { particlesData, positions, colors } = useMemo(() => {
         const pos = new Float32Array(PARTICLE_COUNT * 3);
         const col = new Float32Array(PARTICLE_COUNT * 3);
-        const data = [];
+        const data: { velocity: THREE.Vector3; numConnections: number }[] = [];
 
         const color = new THREE.Color();
 
@@ -177,7 +183,6 @@ function Network() {
     );
 }
 
-import dynamic from "next/dynamic";
 
 const NetworkBackgroundComponent = () => {
     return (
