@@ -19,7 +19,7 @@ export function Contact() {
 
         try {
             // ACTUAL API CALL to your backend
-            const response = await fetch("http://localhost:5000/api/messages", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/messages`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
